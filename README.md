@@ -8,7 +8,7 @@ how to install:
 
 2. extract it into a folder
 
-3. cd into the folder, and type "make"
+3. cd into the folder, cd into "r5u870", and type "make"
 
 4. type "sudo make install"
 
