@@ -1,0 +1,171 @@
+2014-10-25  三陪 <333pei@gmail.com>
+    add v4l2 mocks (not implement them) to make it running again
+
+2012-05-01  三陪 <333pei@gmail.com>
+    Ported r5u870 to kernel-3.2
+
+2011-10-01  三陪 <333pei@gmail.com>
+    Ported r5u870 to kernel <= 3.0
+
+2010-10-01  三陪 <333pei@gmail.com>
+    Ported r5u870 to kernel-2.6.35
+
+2008-06-15  Onur Küçük <onur@pardus.org.tr>
+    Ported r5u870 to kernel-2.6.30.
+
+2008-06-15  Alexander Hixon  <hixon.alexander@mediati.org>
+    Released r5u870 version 0.11.1.
+
+2008-06-15  Alexander Hixon  <hixon.alexander@mediati.org>
+    * usbcam/usbcam.h: Support for late 2.6.25 kernels and up.
+    * usbcam/usbcam.h, usbcam/usbcam_fops.c, README: Bump version to 0.11.1
+    * r5u870_1481.fw: Provide working firmware.
+
+2008-01-21  Alexander Hixon  <hixon.alexander@mediati.org>
+    * r5u870.c, Makefile, r5u870_1841.fw: Added support for the experimental
+      1841 UVC camera.
+    * r5u870.c: Fixed small bug where the wrong ucode version would be used.
+
+2008-01-25  Alexander Hixon  <hixon.alexander@mediati.org>
+    * r5u870.c: Force 1812 camera to use same controls and firmware as HP
+      Pavilion webcam. Still experimental.
+    * usbcam/usbcam.h: Spew all debug by default; bump version to 0.11.0.
+    * usbcam/usbcam_fops.c: Bump version to 0.11.0 prior to release.    
+
+2008-01-18  Alexander Hixon  <hixon.alexander@mediati.org>
+    * usbcam/usbcam_fops.c: Provide working V4L1 support. Probably needs a bit
+      of a cleanup, but works perfectly fine.
+    * r5u870.c: Added support for the 1837 UVC camera - apparently uses the
+      same firmware as the 1836 model. Awating test results from a user.
+
+2008-01-17  Alexander Hixon  <hixon.alexander@mediati.org>
+    * usbcam/usbcam.c: Remove unnecessary file - accidentially kept post-
+      merge.
+
+2008-01-17  Alexander Hixon  <hixon.alexander@mediati.org>
+    * r5u870.c, r5u870_1839.fw, Makefile: Added support for 1839 UVC
+      camera. Also not sure of which UVC camera controls this camera
+      completely supports, however, it appears to work. I also don't own
+      this camera so I can't really test/experiment.
+    * README: Describe which cameras we now support - 183b and 1839 UVC
+      cameras. Also add an extra credit. :)
+
+2008-01-17  Alexander Hixon  <hixon.alexander@mediati.org>
+    * r5u870.c, r5u870_183b.fw, Makefile: Added support for 183b UVC
+      camera. Still not sure about all the WDM controls it supports.
+    * r5u870.c: Remove R5U870_VERSION_EXTRA value, since we're at 0.11.0 - 
+      original device driver never used this version.
+
+2008-01-16  Alexander Hixon  <hixon.alexander@mediati.org>
+    * ChangeLog: Reformat changelog style, and added missing entries.
+    * KBuild, usbcam/usbcam_priv.h, usbcam/usbcam.h, usbcam/usbcam_fops.c,
+      usbcam/usbcam_buf.c, usbcam/usbcam_util.c, usbcam/usbcam_del.c,
+      usbcam/usbcam_skel.c, usbcam/usbcam.c, usbcam/Makefile:
+      
+      Seperate usbcam library out seperately. Part one
+      of two of the code merge from Sam Revitch's release of the r5u870
+      driver on video4linux-list@redhat.com.
+    * r5u870_md.c, r5u870.c, Kbuild: Merged code changes for API change
+      within usbcam. Among other things, remove inflamatory things about HP
+      engineers, remove some debugging cruft, implement a control message
+      helper function, and other misc fixes. Also fixes a bug against Sam's
+      original release where memory might not get freed correctly.
+    * README, r5u870.c: Bump version to 0.11.0.
+    * README: Modified 'Changes from original version' section name and
+      contents, and added some more acknowledgements.
+    
+2008-01-16  Alexander Hixon  <hixon.alexander@mediati.org>
+    * recode-fw.scm: Added this file to easily extract firmware from Windows
+      drivers when needed. Thanks to Utz-Uwe Haus for this.
+
+2008-01-13  Alexander Hixon  <hixon.alexander@mediati.org>
+    * README, Changelog, r5u870_md.c, usbcam.c, usbcam.h: Bump to 0.10.2.
+    * usbcam.c: Uncomment V4L2 control query ioctl.
+
+2008-01-12  Alexander Hixon  <hixon.alexander@mediati.org>
+    * usbcam.c: Fix dereferencing of NULL pointers by checking to see if they
+      have a value before trying to get a memory address.
+
+2008-01-11  Alexander Hixon <hixon.alexander@mediati.org>
+    * r5u870_md.c: Change NULL to { } to hush NULL without definition warning.
+    * usbcam.c: Check results against videobuf operations for return values
+      less than 0, rather than if it != 0.
+
+2008-01-08  Alexander Hixon  <hixon.alexander@mediati.org>
+    * r5u870_md.c: Add NULL to end of definitions list to remove warnings on
+      compile.
+
+2008-01-02  Alexander Hixon  <hixon.alexander@mediati.org>
+	* r5u870_md.c, r5u870_183a.fw, README: Add support for the 183a UVC camera.
+	* r5u870_md.c: Complete V4L1 compatability; unbreaks functionatity with
+	  such applications like GStreamer (and those that depend on the framework, 
+	  such as Cheese).
+	* r5u870_md.c, usbcam.h, usbcam.c: Fix compiling against 2.6.24 kernels -
+	  changes to videobuf API.
+	* README: Initial release against original driver - 0.10.1.
+
+2007-04-07  Sam Revitch  <samr7@cs.washington.edu>
+	* /dev/null: Add support for the 1810, 1835, and 1836 UVC cameras.
+	* /dev/null: Add support for the 1833 non-UVC camera.
+	* /dev/null: Add basic support for UVC commands and UVC personalities of 
+	  various Ricoh webcams.
+	* /dev/null: Add DMI detection of HP Pavilion dv1000 systems.  Most HP
+	  Pavilion machines with the 05ca:1870 device have a 1.3MP camera. The
+	  dv1000 machines with a device reporting that ID instead have a VGA
+	  camera that requires different microcode.
+	* /dev/null: Fix solid blue frames on initial capture with VAIO UX webcams.
+	* /dev/null: Use a cleaner and more concise representation for vendor
+	  control lists in r5u870_md.
+	* /dev/null: Add experimental auto-suspend support to usbcam and r5u870,
+	  but leave it disabled.
+	* /dev/null: Update the usbcam work queue implementation, add some APIs.
+	* README, r5u870_md.c, usbcam.c, usbcam.h: 0.10.0 release.
+
+
+2007-03-21  Sam Revitch  <samr7@cs.washington.edu>
+	* /dev/null: Set all of the controls on device initialization, prior to
+	  starting the first capture session.  This was causing the first capture
+	  session with certain devices to produce a solid blue image.
+	* /dev/null: Resolve build problems with vanilla 2.6.19 kernels.  Thanks
+	  to Naresh Kumar for pointing this out.
+	* /dev/null: Use the driver_info field of the usb_device_id structure to
+	  find the model structure.
+	* /dev/null: Revise the usbcam device referencing model, along with some
+	  other minor usbcam cleanups.
+	* README, r5u870_md.c, usbcam.c, usbcam.h: 0.9.1 release.
+
+
+2007-03-06  Sam Revitch  <samr7@cs.washington.edu>
+	* /dev/null: Change project name to r5u870, as the device called 'ry5u870'
+	  is something Ricoh sells that doesn't seem to be a direct basis for
+	  any of the supported OEM webcams.
+	* /dev/null: Change module name from ry5u870.ko to r5u870.ko, and changed
+	  the install path to "extra" rather than "kernel/drivers/media/video".
+	* /dev/null: Add microcode, device IDs, and control descriptor tables for
+	  HP Pavilion Webcam, Sony VGP-VCC3, and Sony VGP-VCC2 (VAIO AR).
+	* /dev/null: Introduce the webcam model structure, and hang lists of
+	  supported resolutions, pixel formats, and controls off of it.
+	* /dev/null: Use the request_firmware() interface to load microcode, rather 
+	  than embedding the microcode in the driver binary.
+	* /dev/null: Clean up the debug, warning, and error printing macros.
+	* /dev/null: Overhaul the usbcam_curframe_* interfaces.  Add a solid blue
+	  test pattern generator for when a frame is dropped by the minidriver.
+	* /dev/null: Add a workaround for a v4l1_compat bug preventing VIDIOCSPICT
+	  from working, present in kernels prior to 2.6.20.
+	* /dev/null: Add an application bug workaround for Ekiga/ptlib: zero the
+	  flags field of the argument to VIDIOC_QBUF.
+	* /dev/null: Add an application bug workaround for motion: allocate fixed
+	  sized buffers in VIDIOCGMBUF.
+	* /dev/null: Fixed issues with the compat_ioctl method for running 32-bit
+	  apps on 64-bit platforms.
+	* /dev/null: Apparently Linus prefers struct X to X_t.  Mass-update to
+	  match this style for better hopes of getting it merged some day.
+	* README, r5u870_md.c, usbcam.c, usbcam.h: 0.9.0 release.
+
+2007-02-15  Sam Revitch  <samr7@cs.washington.edu>
+	* /dev/null: Fix trivial build problem with kernel 2.6.18.
+	* README, ry5u870_md.c, usbcam.c, usbcam.h: 0.8.1 release.
+
+2007-02-14  Sam Revitch  <samr7@cs.washington.edu>
+	* /dev/null: Initial public release.
+	* README, ry5u870_md.c, usbcam.c, usbcam.h: 0.8.0 release.

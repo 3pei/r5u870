@@ -1,0 +1,223 @@
+Ricoh R5U870 Linux Driver
+Version 0.11.1, 2008/06/15
+
+Requirements
+============
+
+To build/install this driver, you must have a set of configuration and
+interface headers, or the complete build directory, for your running kernel,
+or the target kernel for which the driver is to be built.  This should
+include most files in the include/linux directory, and specifically
+include/linux/autoconf.h and include/linux/version.h.
+
+The required interface headers are usually located at or symlinked from:
+/lib/modules/<version>/build
+
+Your kernel must be 2.6.17 or newer.
+
+
+Supported Hardware
+==================
+
+This driver supports the following OEM webcams:
+
+05ca:1810 HP Pavilion Webcam - UVC
+05ca:1830 Sony Visual Communication Camera VGP-VCC2 (for VAIO SZ)
+05ca:1832 Sony Visual Communication Camera VGP-VCC3 (for VAIO UX)
+05ca:1833 Sony Visual Communication Camera VGP-VCC2 (for VAIO AR1)
+05ca:1834 Sony Visual Communication Camera VGP-VCC2 (for VAIO AR2)
+05ca:1835 Sony Visual Communication Camera VGP-VCC5 (for VAIO SZ)
+05ca:1836 Sony Visual Communication Camera VGP-VCC4 (for VAIO FE)
+05ca:1837 Sony Visual Communication Camera VGP-VCC4 (for VAIO FZ)
+05ca:1839 Sony Visual Communication Camera VGP-VCC6 (for VAIO CR)
+05ca:183a Sony Visual Communication Camera VGP-VCC7 (for VAIO SZ)
+05ca:183b Sony Visual Communication Camera VGP-VCC8 (for VAIO FZ)
+05ca:1870 HP Pavilion Webcam / HP Webcam 1000
+
+
+Installation Process
+====================
+
+To attempt to build against the running kernel:
+
+make
+
+To build against a specific kernel:
+
+make KDIR=/path/to/kernel
+
+To install the modules to the appropriate location:
+
+make install
+
+-or-
+
+make install KDIR=/path/to/kernel
+
+Installed modules will be automatically probed for supported devices by the
+udev coldplug component at boot, and the driver should be automatically
+loaded on subsequent reboots.
+
+NOTE: Previous releases of this driver have produced modules named
+ry5u870.ko.  With the current release, the module name was changed to
+r5u870.ko.  Ensure that any old versions are deleted after installing a
+new version.
+
+
+Loading the Driver
+==================
+
+If you installed the driver, you can just run:
+
+modprobe r5u870
+
+If you wish to load the driver without installing it, you must load the
+prerequisite modules:
+
+modprobe videodev
+modprobe video-buf
+modprobe v4l1-compat
+modprobe v4l2-common
+modprobe compat_ioctl32		(on 64-bit platforms)
+
+You must also copy the microcode files (r5u870_*.fw) to /lib/firmware.
+
+Then you may load the module manually:
+
+insmod r5u870.ko
+
+Debugging
+=========
+
+If you would like to enable debugging, please uncomment the line found
+in debug.mk, and recompile.
+
+Driver Options
+==============
+
+Below is a list of module parameters that may be used with the r5u870 module:
+
+dv1000 -- HP Webcam handling mode
+	HP has done it again and used ID 05ca:1870 for two distinct pieces
+	of hardware: the HP Webcam 1000, found in HP Pavilion dv1000 series
+	machines, and the HP Pavilion Webcam, found in other HP Pavilion
+	machines that don't have Microdia cameras, and don't have the 
+	05ca:1810 Ricoh UVC camera -- which is not actually any different 
+	from the 05ca:1870 HP Pavilion webcam.  These two devices have
+	different image sensors and require different microcode.
+	0: Assume HP Pavilion Webcam
+	1: Assume HP Webcam 1000
+	2: Check DMI product name field (DEFAULT)
+
+video_nr -- list of favored minor numbers
+	A list of video capture minor numbers (/dev/videoX) to try to
+	associate devices with, in order, before resorting to the first
+	available minor number.
+
+fixed_fbsize -- integer
+	Sets the size in bytes of fixed-length frame buffers.  The default
+	value is 1MB.  This is a compatibilty feature for buggy programs
+	that use the V4L1 VIDIOCGMBUF call to allocate a frame buffer
+	based on the current capture size, choose a larger capture size,
+	and then attempt to capture frames.
+
+
+Changes from original version (0.10.0)
+======================================
+
+ *  Properly implements V4L1 query ioctl functions. While version 1 has been
+    obsoleted, it is still necessary to support it as a number of applications
+    still use it, including GStreamer's v4lsrc element.
+ *  Support for VGP-VCC7, VGP-VCC4, VGP-VCC6, and VGP-VCC8, including supplied
+    microcode, as well as other cameras.
+ *  Can compile against Linux kernels 2.6.24 or later.
+ *  Uses a module approach to usbcam, and only require minidrivers to link
+    against a header file. This code was posted in an email to LKML by Chris
+    on May 1, 2007.
+
+Bugs
+====
+
+Use the bug tracker at http://bugs.mediati.org/r5u870/.
+If you get a 404, make sure there's a forward slash on the end. :)
+
+Remember to submit in your bug report:
+  * Version of the driver
+  * Kernel version (uname -a)
+  * Distribution name & version
+  * lsusb output
+  * lsmod output
+  * dmesg output after loading r5u870 with debug=1
+  * if you're getting distorted images, a sample of the camera output
+
+Also remember to check if your bug has already been fixed!
+
+Kopete 0.12 and earlier can be used with this driver, but colors may appear
+distorted.  This is a problem with Kopete's YUV decoder, and should be fixed
+in a future version.  Kopete may also set the gamma picture control to 0
+for no apparent reason, causing the image to appear too dark to Kopete and
+to other applications that subsequently open the camera.
+
+
+Copyright and License
+=====================
+
+Copyright (c) 2007-2008 Sam Revitch <samr7@cs.washington.edu>,
+    Alexander Hixon <hixon.alexander@mediati.org>
+
+This driver is licensed to you under the terms of the GNU GPL v2.  See
+the included file 'COPYING'.
+
+The Makefile and Kbuild components are derived from the ivtv project.
+
+The files:
+	r5u870_1810.fw
+	r5u870_1812.fw
+	r5u870_1830.fw
+	r5u870_1832.fw
+	r5u870_1833.fw
+	r5u870_1834.fw
+	r5u870_1835.fw
+	r5u870_1836.fw
+	r5u870_1839.fw
+	r5u870_183a.fw
+	r5u870_183b.fw
+	r5u870_1841.fw
+	r5u870_1870.fw
+	r5u870_1870_1.fw
+
+were derived from usbsnoop/sniffusb tracing of various Windows drivers, 
+including some named Mvc25u870.sys, 5U870CAP.sys, and R5U870FLx86.sys.
+
+
+Acknowledgements
+================
+
+Huge kudos to Sam Revitch for writing the driver. Cheers, mate. I owe you a
+beer (or two). :)
+
+Thanks to Albert Vilella for establishing an interest group for this type of
+webcam, for early VAIO SZ testing, and generally collecting a good set of
+resources for Linux on VAIO SZ laptops.
+
+Thanks to Geert Willems for extensive testing of HP Webcam support, general
+driver compatibility testing, and putting up with endless crazy requests for
+more debug information. :-)
+
+Thanks to Mattia Dongili for taking usbsnoop traces of the VAIO UX50 webcam
+driver on Windows, and testing initial support in the Linux driver.
+
+Thanks to Beno�t Canet for updating this driver to work with the Sony VAIO AR
+webcam (05ca:1834).
+
+Thanks to Utz-Uwe Haus for getting the Sony VGP-VCC7 firmware extracted, and
+providing a patch against the original r5u870 driver, and providing the
+recode-fw.scm script.
+
+Some friendly folk on the Ubuntu Forums for providing extracted version of
+firmwares and their associated version numbers.
+
+Thanks to Francesco Palmisano for providing an updated version of 183b and Sony VGP-VCC8 driver, and testing.
+
+Thanks to Gonzalo Alvarez for testing the 1812 driver and providing usbsnoop
+traces of the device.
