@@ -1220,7 +1220,7 @@ struct v4l2_file_operations usbcam_v4l_fops_template = {
 	.mmap		= usbcam_v4l_mmap,
 	/*.ioctl		= video_ioctl2,*/
 	.ioctl		= usbcam_v4l_ioctl,
-#ifdef CONFIG_COMPAT
+#ifdef CONFIG_COMPAT && LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
 	.compat_ioctl	= v4l_compat_ioctl32,
 #endif
 };
