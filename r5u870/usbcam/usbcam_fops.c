@@ -549,9 +549,9 @@ static int usbcam_v4l_vidioc_querycap(struct file *filp, void *fh,
 		 "usb:%s", udp->ud_dev->dev.bus_id);
          */
 	cap->version = udp->ud_minidrv->um_version;
-	cap->capabilities = (V4L2_CAP_VIDEO_CAPTURE |
+	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE |
 			     V4L2_CAP_READWRITE |
-			     V4L2_CAP_STREAMING);
+			     V4L2_CAP_STREAMING;
 	usbcam_unlock(udp);
 	return 0;
 }
@@ -1219,7 +1219,11 @@ struct v4l2_file_operations usbcam_v4l_fops_template = {
 	.poll		= usbcam_v4l_poll,
 	.mmap		= usbcam_v4l_mmap,
 	/*.ioctl		= video_ioctl2,*/
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4,1,0)
 	.ioctl		= usbcam_v4l_ioctl,
+#else
+	.unlocked_ioctl	= usbcam_v4l_ioctl,
+#endif
 #if defined(CONFIG_COMPAT) && LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
 	.compat_ioctl	= v4l_compat_ioctl32,
 #endif
